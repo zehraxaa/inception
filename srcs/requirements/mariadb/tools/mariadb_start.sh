@@ -2,8 +2,8 @@
 
 set -e #scriptin herhangi bir komutu hata verirse devam etmez
 
-MYSQL_PASSWORD=$(cat /run/secrets/db_password)
-MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password) 
+# MYSQL_PASSWORD=$(cat /run/secrets/db_password)
+# MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db_root_password) 
 
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
