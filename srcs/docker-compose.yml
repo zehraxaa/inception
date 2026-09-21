@@ -20,6 +20,8 @@ services:
     secrets:
       - db_password
       - db_root_password
+    ports:
+      - 3306:3306
 
 
 networks: 
