@@ -1,49 +1,36 @@
-COMPOSE_FILE	= srcs/docker-compose.yml
-DATA_DIR		= /home/ayse/data
-MARIADB_DIR		= $(DATA_DIR)/mariadb
-WORDPRESS_DIR	= $(DATA_DIR)/wordpress
+COMPOSE_FILE = srcs/docker-compose.yml
+DATA_DIR = /home/ayse/data
 
-.PHONY: all build up down clean fclean re
+all: build up
 
-# Varsayılan hedef: dizinleri oluştur ve servisleri başlat
-all: $(MARIADB_DIR) $(WORDPRESS_DIR)
-	docker compose -f $(COMPOSE_FILE) up -d --build
+$(DATA_DIR)/mariadb:
+	mkdir -p $(DATA_DIR)/mariadb
 
-# Yalnızca image'ları build et, container başlatma
-build: $(MARIADB_DIR) $(WORDPRESS_DIR)
+$(DATA_DIR)/wordpress:
+	mkdir -p $(DATA_DIR)/wordpress
+
+build: $(DATA_DIR)/mariadb $(DATA_DIR)/wordpress
 	docker compose -f $(COMPOSE_FILE) build
 
-# Önceden build edilmiş image'larla servisleri başlat
 up:
 	docker compose -f $(COMPOSE_FILE) up -d
 
-# Container'ları durdur ve kaldır (volume'lar korunur)
 down:
 	docker compose -f $(COMPOSE_FILE) down
 
-# Container, image ve volume'ları kaldır; data dizinlerini temizle
-# Docker volume içindeki dosyalar root sahipli olabilir — alpine container içinden sil
-clean: down
-	docker compose -f $(COMPOSE_FILE) down --volumes --rmi all 2>/dev/null || true
-	@if [ -d "$(MARIADB_DIR)" ]; then \
-		docker run --rm -v $(MARIADB_DIR):/target alpine sh -c "rm -rf /target/*" 2>/dev/null || true; \
-		rmdir $(MARIADB_DIR) 2>/dev/null || true; \
-	fi
-	@if [ -d "$(WORDPRESS_DIR)" ]; then \
-		docker run --rm -v $(WORDPRESS_DIR):/target alpine sh -c "rm -rf /target/*" 2>/dev/null || true; \
-		rmdir $(WORDPRESS_DIR) 2>/dev/null || true; \
-	fi
+start:
+	docker compose -f $(COMPOSE_FILE) start
 
-# clean + bütün kullanılmayan Docker kaynaklarını temizle
-fclean: clean
-	docker system prune -af --volumes 2>/dev/null || true
+stop:
+	docker compose -f $(COMPOSE_FILE) stop
 
-# Sıfırdan yeniden başlat
+clean:
+	docker compose -f $(COMPOSE_FILE) down --rmi all 
+
+fclean: 
+	docker compose -f $(COMPOSE_FILE) down --rmi all --volumes
+	sudo rm -rf $(DATA_DIR)
+
 re: fclean all
 
-# Data dizinlerini oluşturan implicit kurallar
-$(MARIADB_DIR):
-	mkdir -p $(MARIADB_DIR)
-
-$(WORDPRESS_DIR):
-	mkdir -p $(WORDPRESS_DIR)
+.PHONY: all build up down clean fclean re start stop
