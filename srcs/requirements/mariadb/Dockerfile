@@ -6,6 +6,8 @@ RUN apt-get update \
 
 COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
+RUN mkdir -p /run/mysqld && chown mysql:mysql /run/mysqld
+
 COPY tools/mariadb_start.sh /usr/local/bin/mariadb_start.sh
 
 RUN chmod +x /usr/local/bin/mariadb_start.sh
@@ -13,3 +15,5 @@ RUN chmod +x /usr/local/bin/mariadb_start.sh
 EXPOSE 3306
 
 ENTRYPOINT ["/usr/local/bin/mariadb_start.sh"]
+
+# CMD ["mariadbd", "--user=mysql"]
