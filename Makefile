@@ -1,5 +1,5 @@
 COMPOSE_FILE = srcs/docker-compose.yml
-DATA_DIR = /home/ayse/data
+DATA_DIR = /home/aaydogdu/data
 
 all: build up
 

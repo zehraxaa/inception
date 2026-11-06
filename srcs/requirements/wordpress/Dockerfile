@@ -21,9 +21,7 @@ COPY tools/wordpress_start.sh /usr/local/bin/wordpress_start.sh
 RUN chmod +x /usr/local/bin/wordpress_start.sh
 
 WORKDIR /var/www/wordpress          
-#diyorum ki artık wordpress dosyaları burda tutulacak
 
 EXPOSE 9000
-#wordpress nginx ile iletişim için sadece 9000 portunu kullanır
 
 ENTRYPOINT ["/usr/local/bin/wordpress_start.sh"]
