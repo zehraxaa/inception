@@ -10,8 +10,6 @@ WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password | tr -d '\n')
 
 if [ ! -f "${WP_PATH}/wp-config.php" ]; then
 
-    echo "[WordPress] Kurulum başlıyor..."
-
     mkdir -p "${WP_PATH}"
 
     wp core download \
@@ -43,10 +41,7 @@ if [ ! -f "${WP_PATH}/wp-config.php" ]; then
         --user_pass="${WP_USER_PASSWORD}" \
         --role=author \
         --allow-root
-
-    echo "[WordPress] Kurulum tamamlandı."
 fi
-
     chown -R www-data:www-data $WP_PATH
     chmod -R 755 $WP_PATH
 

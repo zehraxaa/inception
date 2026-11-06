@@ -13,7 +13,6 @@ if [ ! -f "${SSL_CRT}" ]; then
         -keyout "${SSL_KEY}" \
         -out "${SSL_CRT}" \
         -subj "/CN=aaydogdu.42.fr"
-    echo "SSL sertifikası oluşturuldu."
 fi
 
 nginx -t
